@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project</title>
+
+    <link rel="stylesheet" href="/My project/Project 2/bootstrap1.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</head>
+
+<body onload="studentTable()">
+
+    <br>
+    <h1>Student Information</h1>
+
+    <div class="container">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Add Student
+        </button>
+        <br>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Student Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-2" onsubmit="addStudent(event)">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control " id="name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="text" class="form-control " id="phone" required>
+                                <div id="phoneError" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="text" class="form-control " id="email" required>
+                                <div id="emailError" class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control " id="city" required>
+                            </div>
+                             <div class="col-md-6">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control " id="state" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" class="form-control " id="country" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pincode" class="form-label">Pin Code</label>
+                                <input type="text" class="form-control " id="pincode" required>
+                            </div>
+                            <div class="col-md-6">
+                              <label for="gender" class="form-label">Gender</label>
+                              <select class="form-select " id="gender" required>
+                                  <option selected disabled value="">Choose...</option>
+                                  <option>Male</option>
+                                  <option>Female</option>
+                                  <option>Others</option>
+                              </select>
+                          </div>
+
+                            <div class="col-12">
+                              <div>
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                              </div>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table-bordered table border-dark">
+            <thead class="table-info">
+                <tr>
+                    <th>S.no</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>E-mail</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Pin Code</th>
+                    <th>Gender</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        function addStudent(event) {
+            event.preventDefault();
+
+            // Get form values
+            let name = document.getElementById("name").value;
+            let phone = document.getElementById("phone").value;
+            let email = document.getElementById("email").value;
+            let city = document.getElementById("city").value;
+            let state = document.getElementById("state").value;
+            let country = document.getElementById("country").value;
+            let pincode = document.getElementById("pincode").value;
+            let gender = document.getElementById("gender").value;
+
+           
+
+            // Validate phone number
+            var phoneRegex = /^\d{10}$/;
+            var phoneError = document.getElementById("phoneError");
+            if (!phoneRegex.test(phone)) {
+                phoneError.textContent = "Invalid phone number";
+                document.getElementById("phone").classList.add("is-invalid");
+                return;
+            } else {
+                phoneError.textContent = "";
+                document.getElementById("phone").classList.remove("is-invalid");
+            }
+
+            // Validate email
+            var emailRegex = /^\S+@\S+\.\S+$/;
+            var emailError = document.getElementById("emailError");
+            if (!emailRegex.test(email)) {
+                emailError.textContent = "Invalid email";
+                document.getElementById("email").classList.add("is-invalid");
+                return;
+            } else {
+                emailError.textContent = "";
+                document.getElementById("email").classList.remove("is-invalid");
+            }
+
+           
+
+            // Create a new row for the student
+            let tableBody = document.getElementById("studentTableBody");
+            let newRow = document.createElement("tr");
+
+            // Add the serial number
+            let serialNumberCell = document.createElement("td");
+            let serialNumber = tableBody.childElementCount + 1;
+            serialNumberCell.textContent = serialNumber;
+            newRow.appendChild(serialNumberCell);
+
+            // Add the student information
+            const nameCell = document.createElement("td");
+            nameCell.textContent = name;
+            newRow.appendChild(nameCell);
+
+            const phoneCell = document.createElement("td");
+            phoneCell.textContent = phone;
+            newRow.appendChild(phoneCell);
+
+            const emailCell = document.createElement("td");
+            emailCell.textContent = email;
+            newRow.appendChild(emailCell);
+
+            const cityCell = document.createElement("td");
+            cityCell.textContent = city;
+            newRow.appendChild(cityCell);
+
+            var stateCell = document.createElement("td");
+            stateCell.textContent = state;
+            newRow.appendChild(stateCell);
+
+            const countryCell = document.createElement("td");
+            countryCell.textContent = country;
+            newRow.appendChild(countryCell);
+
+            const pincodeCell = document.createElement("td");
+            pincodeCell.textContent = pincode;
+            newRow.appendChild(pincodeCell);
+
+            const genderCell = document.createElement("td");
+            genderCell.textContent = gender;
+            newRow.appendChild(genderCell);
+
+            // Add the delete button
+            const deleteCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "btn btn-danger btn-sm";
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", function () {
+                if (confirm("Are you sure you want to delete this student?")) {
+                    var row = this.parentNode.parentNode;
+                    var rowIndex = row.rowIndex;
+                    tableBody.removeChild(row);
+                    updateSerialNumbers();
+                }
+            });
+            deleteCell.appendChild(deleteButton);
+            newRow.appendChild(deleteCell);
+
+            // Add the new row to the table
+            tableBody.appendChild(newRow);
+
+            // Clear the form
+            document.getElementById("name").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("city").value = "";
+            document.getElementById("state").value = "";
+            document.getElementById("country").value = "";
+            document.getElementById("pincode").value = "";
+            document.getElementById("gender").value = "";
+
+            // Close the modal
+            let modal = document.getElementById("exampleModal");
+            let bootstrapModal = bootstrap.Modal.getInstance(modal);
+            bootstrapModal.hide();
+        }
+
+        function studentTable() {
+            // Load students from local storage and populate the table
+            var students = JSON.parse(localStorage.getItem("students")) || [];
+            var tableBody = document.getElementById("studentTableBody");
+
+            for (let i = 0; i < students.length; i++) {
+                let student = students[i];
+
+                let newRow = document.createElement("tr");
+
+                let serialNumberCell = document.createElement("td");
+                serialNumberCell.textContent = i + 1;
+                newRow.appendChild(serialNumberCell);
+
+                let nameCell = document.createElement("td");
+                nameCell.textContent = student.name;
+                newRow.appendChild(nameCell);
+
+                let phoneCell = document.createElement("td");
+                phoneCell.textContent = student.phone;
+                newRow.appendChild(phoneCell);
+
+                let emailCell = document.createElement("td");
+                emailCell.textContent = student.email;
+                newRow.appendChild(emailCell);
+
+                let cityCell = document.createElement("td");
+                cityCell.textContent = student.city;
+                newRow.appendChild(cityCell);
+
+                let stateCell = document.createElement("td");
+                stateCell.textContent = student.state;
+                newRow.appendChild(stateCell);
+
+                let countryCell = document.createElement("td");
+                countryCell.textContent = student.country;
+                newRow.appendChild(countryCell);
+
+                let pincodeCell = document.createElement("td");
+                pincodeCell.textContent = student.pincode;
+                newRow.appendChild(pincodeCell);
+
+                let genderCell = document.createElement("td");
+                genderCell.textContent = student.gender;
+                newRow.appendChild(genderCell);
+
+                let deleteCell = document.createElement("td");
+                let deleteButton = document.createElement("button");
+                deleteButton.className = "btn btn-danger btn-sm";
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener("click", function () {
+                    if (confirm("Are you sure you want to delete this student?")) {
+                        var row = this.parentNode.parentNode;
+                        var rowIndex = row.rowIndex;
+                        tableBody.removeChild(row);
+                        students.splice(rowIndex - 1, 1);
+                        updateSerialNumbers();
+                        localStorage.setItem("students", JSON.stringify(students));
+                    }
+                });
+                deleteCell.appendChild(deleteButton);
+                newRow.appendChild(deleteCell);
+
+                tableBody.appendChild(newRow);
+            }
+        }
+
+        function updateSerialNumbers() {
+            var tableBody = document.getElementById("studentTableBody");
+            var rows = tableBody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                let row = rows[i];
+                let serialNumberCell = row.getElementsByTagName("td")[0];
+                serialNumberCell.textContent = i + 1;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
